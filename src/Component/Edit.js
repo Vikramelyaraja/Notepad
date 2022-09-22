@@ -48,7 +48,7 @@ function Edit(){
     
     return(
         <div>
-            <h1>CRUD Insert, Update and Delete</h1>
+            <h2>CRUD Insert, Update and Delete</h2>
             <input value={title} placeholder='Title' onChange={(e)=>setTitle(e.target.value)} /><br/>
             {!show?<button onClick={handleAdd}>Add</button>:
             <button onClick={handleUpdate}>Update</button>}
