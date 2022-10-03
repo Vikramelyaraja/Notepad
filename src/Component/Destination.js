@@ -1,7 +1,7 @@
 import React from 'react'
-import image1 from '../Asserts/Images/screen1.png'
-import image2 from '../Asserts/Images/screen2.png'
-import image3 from '../Asserts/Images/Screen3.png'
+import image1 from '..//Asserts/Images/screen1.png'
+import image2 from '..//Asserts/Images/screen2.png'
+import image3 from '..//Asserts/Images/Screen3.png'
 
 const Destinations = () => {
   return (

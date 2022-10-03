@@ -1,6 +1,6 @@
 import {useState,useEffect} from 'react'
 import {Link,useLocation,useNavigate } from 'react-router-dom'
-import Header1 from './Header1'
+import Header from './Header'
 import Icon from '@mui/material/Icon';
 import Grid from '@mui/material/Grid';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -28,18 +28,16 @@ function Home() {
   const navigate =useNavigate();
    const {state}=useLocation();
    const[task1,setTask1]=useState(state);
+ 
 
    useEffect (()=>{
-     //alert(JSON.stringify(task1))
-    // setTask1(state)
+  
    },[])
 
    const deleteclick=(index)=>{
 
     task1.splice(index, 1);
     setTask1([...task1]);
-
-    // alert('Delete Success');
     
     Swal.fire({
       title: 'Are you sure?',
@@ -61,26 +59,19 @@ function Home() {
   }
 
   const View=(item)=>{
-    navigate('/View',{state:item});
-    Swal.fire({
-      icon: 'question',
-      text:'Do you want to view your Task!'
-      
-  })
+    navigate('/todo/viewmode',{state:item});
   }
 
-  const handleEdit=()=>{
-    // setName(allData[i])
-    // setEditIndex(i)
-     navigate('/todo');
-}
+
+	const handleEdit = (item) => {
+		navigate('/todo/editmode',{ state: item });
+	};
 
 
   return (
 <div>
-    <Header1/>
+    <Header/>
     <ThemeProvider theme={theme}>
-      {/* <Grid container component="main" sx={{ height: '100vh' }}> */}
         <CssBaseline />
         <Grid
           item
@@ -94,33 +85,33 @@ function Home() {
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            height:600
+            height:663
           }}
         >
           <div style={{marginLeft:630,marginBottom:100}}>
-              <Link to='/todo'>
+              <Link to='/todo/addmode'>
                 <Icon sx={{ backgroundColor:'green',height:40,width:40,borderRadius:30,fontSize:25,color:'#fff',fontWeight:'bold',marginTop:5}}>+</Icon>
              </Link>
               <h2 style={{color:'#fff',marginTop:20,marginLeft:-30}}>Add Task</h2>
           </div>
-          <div style={{marginLeft:400,marginTop:-70,height:350,width:500,backgroundColor:'#fff',borderRadius:10,marginBottom:30}}>
-          
-          
-<TableContainer component={Paper}>
-      <Table sx={{ minWidth: 50 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell style={{color:'#000',backgroundColor:'lightblue',width:150,fontWeight:'bold'}}>Title</TableCell>
-            <TableCell style={{color:'#000',backgroundColor:'pink',fontWeight:'bold'}}>Delete</TableCell>
-            <TableCell style={{color:'#000',backgroundColor:'lightblue',fontWeight:'bold'}}>Edit</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-         
+
         
-          { task1?.length > 0 && task1.map((item,index) => {
+           { task1?.length > 0 && task1.map((item,index) => {
             return (
-            
+              <div style={{marginLeft:400,marginTop:-70,height:350,width:500,backgroundColor:'#fff',borderRadius:10,marginBottom:30}}>
+          
+          
+              <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 50 }} aria-label="simple table">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell style={{color:'#000',backgroundColor:'lightblue',width:150,fontWeight:'bold'}}>Title</TableCell>
+                          <TableCell style={{color:'#000',backgroundColor:'pink',fontWeight:'bold'}}>Delete</TableCell>
+                          <TableCell style={{color:'#000',backgroundColor:'lightblue',fontWeight:'bold'}}>Edit</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                       
               <TableRow
                   key={item.title}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -137,21 +128,19 @@ function Home() {
                   </TableCell >
                  
                   <TableCell component="th" scope="row">
-                  <Button className='edit' variant="outlined"  startIcon={<ModeEdit />} onClick={()=>handleEdit()}  >
+                  <Button className='edit' variant="outlined"  startIcon={<ModeEdit />} onClick={()=>handleEdit(item)}  >
                       Edit
                   </Button>
                   </TableCell>
                   
               </TableRow>
-        
-          
-            );
-              })}
-      
         </TableBody>
       </Table>
     </TableContainer>
           </div>
+                      );
+                    })}
+            
          
         </Grid>
 

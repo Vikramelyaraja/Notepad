@@ -39,12 +39,6 @@ const Basic = () => {
         Swal.fire({icon: 'success',text:'Logged in Success'})
      };
 
-    //  useEffect(() => {
-    //   // storing input name
-    //   localStorage.setItem("Email", JSON.stringify(Email));
-    // }, [Email]);
-
-
      const back = () => {
        
        navigate('/');
@@ -166,7 +160,7 @@ const Basic = () => {
                                             disabled={isSubmitting}
                                             onSubmit={handleSubmit}
                                             onClick={()=>{localStorage.setItem('token','tested')
-                                              localStorage.setItem('username','Vikram')
+                                              localStorage.setItem('username',values.email)
                                               }}
                                       
                                         >

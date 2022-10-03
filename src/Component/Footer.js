@@ -61,8 +61,6 @@ const Footer = () => {
         </Stack>
         </li>
       </ul>
-      
-
     </footer>
   )
 }
