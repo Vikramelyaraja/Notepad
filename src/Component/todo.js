@@ -33,18 +33,7 @@ const Todo = () => {
 
   }, []);
 
-  if(mode ==='viewmode'){
-    disabled=true;
-    name="Close"
-  }
-  else if(mode==='editmode'){
-    name="update"
-  }
-
-  else {
-    disabled=false;
-    name="Add"
-  }
+ 
 
   const titlechange = (e) => {
     setTitle1(e.target.value);
@@ -100,45 +89,6 @@ const Todo = () => {
 			}
 		}
 
-
-
-
-
-    // if(mode ==="editmode"){
-    //   const update = [{ id: taskList.length + 1, title: title1, desc: desc1 }];
-    //   navigate('/Home',{state:update});
-    //   name="Update"
-    //   disabled='false';
-
-    // }else if(mode==='viewmode'){
-    //   const view = [{ id: taskList.length + 1, title: title1, desc: desc1 }];
-    //   navigate('/Home',{state:view});
-    //   name="Close"
-    //   disabled='true';
-
-    // }else{
-    //   if(mode ==='addmode'){
-
-    //     if (title1 === "") {
-    //       Swal.fire({ icon: "warning", text: "Enter Title" });
-    //     } else if (desc1 === "") {
-    //       Swal.fire({ icon: "warning", text: "Enter Description" });
-    //     } else {
-    //       const tempre = [{ id: taskList.length + 1, title: title1, desc: desc1 }];
-    
-    //       Swal.fire("Thank You!", "Successfully added your Task!", "success");
-    //       navigate('/Home', { state:tempre });
-    //     }
-    //     setTitle1('');
-    //     setDesc1('');
-  
-    //   }else{
-  
-    //   }
-    // }
-    
-
-   
   
   };
 
@@ -192,7 +142,12 @@ const Todo = () => {
             name="title"
             onChange={(e) => titlechange(e)}
             className="title"
-            disabled={disabled}
+            disabled={{
+							'viewmode': true,
+							'addmode': false,
+							'editmode': false
+						}[mode]}
+           
            /> 
           <br />
 
@@ -205,7 +160,11 @@ const Todo = () => {
             name="desc"
             onChange={(e) => descchange(e)}
             className="desc"
-            disabled={disabled}
+            disabled={{
+							'viewmode': true,
+							'addmode': false,
+							'editmode': false
+						}[mode]}
           />
 
           <div style={{ flexDirection: "row" }}>
@@ -215,7 +174,13 @@ const Todo = () => {
             variant="contained"
             onClick={() => addclick()}
             >
-          {name}
+          {/* Switch for params */}
+						{{
+							'viewmode': 'Close',
+							'addmode': 'Add',
+							'editmode': 'Update'
+						}[mode]}
+            
             </Button>
 
           </div>
