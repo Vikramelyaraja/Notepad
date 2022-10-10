@@ -8,13 +8,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {Button, } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import ModeEdit from '@mui/icons-material/ModeEdit';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import { Table, TableContainer, TableHead, TableRow, TableCell, TableBody, Paper } from '@mui/material';
+import PublishedWithChangesIcon from '@mui/icons-material/PublishedWithChanges';
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import Swal from 'sweetalert2';
 
 
@@ -26,37 +22,52 @@ const theme = createTheme();
 function Home() {
 
   const navigate =useNavigate();
-   const {state}=useLocation();
-   const[task1,setTask1]=useState(state);
- 
+   //const {state}=useLocation();
+   //const[task1,setTask1]=useState(state);
+   var notelistdata = JSON.parse(localStorage.getItem("notelist")) || [];
+  const [task1, setTask1] = useState(notelistdata?.length > 0 ? notelistdata : []);
+  function removeObjectWithId(arr, id) {
+    const objWithIdIndex = arr.findIndex((obj) => obj.id === id);
+    arr.splice(objWithIdIndex, 1);
+
+    return arr;
+  }
 
    useEffect (()=>{
   
    },[])
 
-   const deleteclick=(index)=>{
+ 
+  const deleteclick = (id) => {
+    var finaldata = removeObjectWithId(notelistdata, id)
+    localStorage.setItem("notelist", JSON.stringify([...finaldata]))
+    setTask1([...finaldata]);
+    alert('delete');
+  };
 
-    task1.splice(index, 1);
-    setTask1([...task1]);
+  //  const deleteclick=(index)=>{
+
+  //   task1.splice(index, 1);
+  //   setTask1([...task1]);
     
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: 'blue',
-      cancelButtonColor: 'red',
-      confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire(
-          'Deleted!',
-          'Your task has been deleted.',
-          'success'
-        )
-      }
-    })
-  }
+  //   Swal.fire({
+  //     title: 'Are you sure?',
+  //     text: "You won't be able to revert this!",
+  //     icon: 'warning',
+  //     showCancelButton: true,
+  //     confirmButtonColor: 'blue',
+  //     cancelButtonColor: 'red',
+  //     confirmButtonText: 'Yes, delete it!'
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       Swal.fire(
+  //         'Deleted!',
+  //         'Your task has been deleted.',
+  //         'success'
+  //       )
+  //     }
+  //   })
+  // }
 
   const View=(item)=>{
     navigate('/todo/viewmode',{state:item});
@@ -66,6 +77,15 @@ function Home() {
 	const handleEdit = (item) => {
 		navigate('/todo/editmode',{ state: item });
 	};
+
+  const updateStatus = (id) => {
+    var findIndex = notelistdata.findIndex((item) => item.id === id)
+    notelistdata[findIndex].status = 'done';
+    setTask1([...notelistdata])
+    localStorage.setItem("notelist", JSON.stringify([...notelistdata]))
+    Swal.fire('Good job!', 'Your Task is done !', 'success');
+
+  }
 
 
   return (
@@ -95,52 +115,50 @@ function Home() {
               <h2 style={{color:'#fff',marginTop:20,marginLeft:-30}}>Add Task</h2>
           </div>
 
-        
-           { task1?.length > 0 && task1.map((item,index) => {
-            return (
-              <div style={{marginLeft:400,marginTop:-70,height:350,width:500,backgroundColor:'#fff',borderRadius:10,marginBottom:30}}>
-          
-          
-              <TableContainer component={Paper}>
-                    <Table sx={{ minWidth: 50 }} aria-label="simple table">
-                      <TableHead>
-                        <TableRow>
-                          <TableCell style={{color:'#000',backgroundColor:'lightblue',width:150,fontWeight:'bold'}}>Title</TableCell>
-                          <TableCell style={{color:'#000',backgroundColor:'pink',fontWeight:'bold'}}>Delete</TableCell>
-                          <TableCell style={{color:'#000',backgroundColor:'lightblue',fontWeight:'bold'}}>Edit</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                       
-              <TableRow
-                  key={item.title}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                >
-                
-                  <TableCell onClick={() => View(item)} component="th" scope="row">
-                    {item.title}
-                  </TableCell>
-                 
-                  <TableCell  component="th" scope="row">
-                  <Button className='delete' variant="outlined" onClick={()=>deleteclick(index)} startIcon={<DeleteIcon />}>
-                      Delete
-                  </Button>
-                  </TableCell >
-                 
-                  <TableCell component="th" scope="row">
-                  <Button className='edit' variant="outlined"  startIcon={<ModeEdit />} onClick={()=>handleEdit(item)}  >
-                      Edit
-                  </Button>
-                  </TableCell>
-                  
+          <div className="listed">
+        <TableContainer component={Paper}>
+          <Table aria-label="simple table">
+            <TableHead>
+              <TableRow style={{ backgroundColor: '#cbade6' }}>
+                <TableCell style={{ color: '#000', width: 150, fontWeight: 'bold' }}>
+                  ID
+                </TableCell>
+                <TableCell style={{ color: '#000', width: 150, fontWeight: 'bold' }}>
+                  Title
+                </TableCell>
+                <TableCell style={{ color: '#000', width: 150, fontWeight: 'bold' }}>
+                  Details
+                </TableCell>
+                <TableCell style={{ color: '#000', fontWeight: 'bold' }} colSpan={2}>Action</TableCell>
               </TableRow>
-        </TableBody>
-      </Table>
-    </TableContainer>
-          </div>
-                      );
-                    })}
-            
+            </TableHead>
+            <TableBody>
+              {task1?.length > 0 ?
+                task1.map((item, index) => {
+                  return (
+                    <TableRow key={index} >
+                      <TableCell onClick={() => View(item)}>
+                        {item.id}
+                      </TableCell> <TableCell onClick={() => View(item)}>
+                        {item.title}
+                      </TableCell>
+                      <TableCell onClick={() => View(item)}>
+                        {item.status === 'todo' ? item.description : <s>{item.description}</s>}
+                      </TableCell>
+                      <TableCell colSpan={2}>
+                        <ModeEdit onClick={() => handleEdit(item)} />
+                        <DeleteIcon onClick={() => deleteclick(item.id)} />
+
+                        {item.status === 'todo' ? <PublishedWithChangesIcon onClick={() => updateStatus(item.id)} /> : <TaskAltIcon />}
+                      </TableCell>
+                    </TableRow>);
+                }) :
+                <TableRow colSpan={4} style={{ textAlign: 'center' }}>
+                  <center>No Data, Click + Button to add data</center></TableRow>}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
          
         </Grid>
 
