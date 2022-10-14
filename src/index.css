@@ -320,4 +320,13 @@ showcase2 {
   border-radius: 10px;
   display: inline-block;
 }
+.listed1 {
+
+  margin-top: 200px;
+  margin-left: 100px;
+  width: 60%;
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px;
+  display: inline-block;
+}
 }

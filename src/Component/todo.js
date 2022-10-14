@@ -5,7 +5,8 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Swal from "sweetalert2";
-
+import { Table, TableContainer, TableHead, TableRow, TableCell, TableBody, Paper } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 const Todo = () => {
 
   const { state } = useLocation();
@@ -14,6 +15,9 @@ const Todo = () => {
   const [desc1, setDesc1] = useState(state?.description?state.description :'');
   const [show,setShow] = useState(state);
   const [view ,setView]= useState(mode);
+  const [list,setList]=useState([]);
+  const [users, setUsers] = useState([])
+  
 
   let disabled=false;
   let name ='';
@@ -25,14 +29,31 @@ const Todo = () => {
 
   console.log(mode)
   
+  
+
   const back = () => {
     navigate("/Home");
   };
 
   useEffect(() => {
+  // alert(users)
+   fetchData()
 
   }, []);
 
+  const fetchData = () => {
+    fetch("https://dummyjson.com/products")
+      .then(response => {
+        return response.json()
+      })
+      .then(data => {
+        setUsers(data.products)
+        //console.log(data)
+      })
+  }
+
+
+   
  
 
   const titlechange = (e) => {
@@ -72,7 +93,7 @@ const Todo = () => {
 				}
 				// const tempre = [{ id: listed.length + 1, title: title, description: description }];
 				Swal.fire('Good job!', 'Your Entry is Success!', 'success');
-				navigate('/home');
+				navigate('/Home',{ state:users });
 			}
 			else if (mode === "editmode") {
 				var findIndex = notelistdata.findIndex((item) => item.id === state.id)
@@ -80,7 +101,7 @@ const Todo = () => {
 				notelistdata[findIndex].description = desc1;
 				localStorage.setItem("notelist", JSON.stringify([...notelistdata]))
 				Swal.fire('Good job!', 'Your Entry is updated Success!', 'success');
-				navigate('/home');
+				navigate('/Home');
 			}
 			else if (mode === "viewmode") {
 				const view = [{ id: taskList.length + 1, title: title1, description: desc1 }];
@@ -105,6 +126,8 @@ const Todo = () => {
         </Button>
       </div>
 
+
+      
       <div
         style={{
           marginLeft: 350,
@@ -119,7 +142,7 @@ const Todo = () => {
           justifyContent: "center",
         }}
       >
-       
+        
        
         
         <Box
@@ -180,13 +203,14 @@ const Todo = () => {
 							'addmode': 'Add',
 							'editmode': 'Update'
 						}[mode]}
-            
-            </Button>
 
+            </Button> 
           </div>
         </Box>
 
+
       </div>
+      
     </div>
   );
 };

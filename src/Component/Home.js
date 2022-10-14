@@ -22,8 +22,9 @@ const theme = createTheme();
 function Home() {
 
   const navigate =useNavigate();
-   //const {state}=useLocation();
-   //const[task1,setTask1]=useState(state);
+   const {state}=useLocation();
+   const[data,setData]=useState(state);
+
    var notelistdata = JSON.parse(localStorage.getItem("notelist")) || [];
   const [task1, setTask1] = useState(notelistdata?.length > 0 ? notelistdata : []);
   function removeObjectWithId(arr, id) {
@@ -34,7 +35,7 @@ function Home() {
   }
 
    useEffect (()=>{
-  
+  //alert(JSON.stringify(state))
    },[])
 
  
@@ -68,6 +69,11 @@ function Home() {
   //     }
   //   })
   // }
+
+  const delete1 = (index) => {
+    data.splice(index, 1);
+    setData([...data]);
+  };
 
   const View=(item)=>{
     navigate('/todo/viewmode',{state:item});
@@ -108,8 +114,8 @@ function Home() {
             height:663
           }}
         >
-          <div style={{marginLeft:630,marginBottom:100}}>
-              <Link to='/todo/addmode'>
+          <div style={{marginLeft:630,marginBottom:50}}>
+              <Link to='/Todo/addmode'>
                 <Icon sx={{ backgroundColor:'green',height:40,width:40,borderRadius:30,fontSize:25,color:'#fff',fontWeight:'bold',marginTop:5}}>+</Icon>
              </Link>
               <h2 style={{color:'#fff',marginTop:20,marginLeft:-30}}>Add Task</h2>
@@ -127,7 +133,7 @@ function Home() {
                   Title
                 </TableCell>
                 <TableCell style={{ color: '#000', width: 150, fontWeight: 'bold' }}>
-                  Details
+                  Description
                 </TableCell>
                 <TableCell style={{ color: '#000', fontWeight: 'bold' }} colSpan={2}>Action</TableCell>
               </TableRow>
@@ -145,7 +151,7 @@ function Home() {
                       <TableCell onClick={() => View(item)}>
                         {item.status === 'todo' ? item.description : <s>{item.description}</s>}
                       </TableCell>
-                      <TableCell colSpan={2}>
+                      <TableCell  colSpan={2}>
                         <ModeEdit onClick={() => handleEdit(item)} />
                         <DeleteIcon onClick={() => deleteclick(item.id)} />
 
@@ -159,6 +165,51 @@ function Home() {
           </Table>
         </TableContainer>
       </div>
+
+      <div className="listed1">
+        <TableContainer component={Paper}>
+          <Table aria-label="simple table">
+            <TableHead>
+              <TableRow style={{ backgroundColor: '#cbade6' }}>
+                <TableCell style={{ color: '#000', width: 50, fontWeight: 'bold' }}>
+                  ID
+                </TableCell>
+                <TableCell style={{ color: '#000', width: 180, fontWeight: 'bold' }}>
+                  Title
+                </TableCell>
+                <TableCell style={{ color: '#000', width: 300, fontWeight: 'bold' }}  colSpan={2}>
+                  Description
+                </TableCell>
+                <TableCell style={{ color: '#000', fontWeight: 'bold',width: 100 }} colSpan={2}>Action</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+            {data?.length > 0 && (
+              <>
+                {data.map((user,index) => (
+                 
+                    <TableRow key={user.id} >
+                      <TableCell >
+                      {user.id}
+                      </TableCell>
+                      <TableCell >
+                      {user.title}
+                      </TableCell> 
+                      <TableCell colSpan={2} >
+                      {user.description}
+                      </TableCell>
+                      <TableCell >
+                        <DeleteIcon onClick={() => delete1(index)} />
+                      </TableCell>
+                      </TableRow>
+                      ))}
+              </>
+          )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div> 
+      
          
         </Grid>
 

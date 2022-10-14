@@ -6,7 +6,7 @@ import Error from './Component/Error'
 import Home from './Component/Home'
 import Landing from './Component/Landing';
 import Faq from './Component/faq'
-import Todo from './Component/todo';
+import Todo from './Component/Todo';
 
 function app() {
   return (
